@@ -16,7 +16,7 @@ namespace FEMR.Core
             var handlerType = typeof(ICommandHandler<>).MakeGenericType(command.GetType());
             dynamic handler = _serviceLocator.GetInstance(handlerType);
 
-            await handler.Handle((dynamic)command);
+            await handler.Handle((dynamic) command);
         }
     }
 }

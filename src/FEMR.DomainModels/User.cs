@@ -8,9 +8,14 @@ namespace FEMR.DomainModels
 {
     public class User : Aggregate
     {
-        public User(Guid userId, string email, string firstName, string lastName) : this()
+        public User(Guid userId, string email, string password, string firstName, string lastName) : this()
         {
-            RaiseEvent(new UserCreated(userId, email, firstName, lastName));
+            RaiseEvent(new UserCreated(userId, email, password, firstName, lastName));
+        }
+
+        public User(IEnumerable<IEvent> events) : this()
+        {
+            events.ToList().ForEach(ApplyEvent);
         }
 
         private User()
@@ -19,12 +24,12 @@ namespace FEMR.DomainModels
             Register<UserEmailUpdated>(Apply);
         }
 
-        public User(IEnumerable<IEvent> events) : this()
-        {
-            events
-                .ToList()
-                .ForEach(ApplyEvent);
-        }
+        public override Guid Id => UserId;
+        public Guid UserId { get; private set; }
+        public string Email { get; private set; }
+        public string Password { get; private set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
 
         public void UpdateEmail(string newEmail)
         {
@@ -35,6 +40,7 @@ namespace FEMR.DomainModels
         {
             UserId = @event.UserId;
             Email = @event.Email;
+            Password = @event.Password;
             FirstName = @event.FirstName;
             LastName = @event.LastName;
         }
@@ -43,11 +49,5 @@ namespace FEMR.DomainModels
         {
             Email = @event.Email;
         }
-
-        public override Guid Id => UserId;
-        public Guid UserId { get; private set; }
-        public string Email { get; private set; }
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
     }
 }

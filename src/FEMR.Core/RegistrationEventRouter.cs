@@ -14,7 +14,7 @@ namespace FEMR.Core
 
         public void Register<T>(Action<T> handler)
         {
-            _handlers[typeof(T)] = @event => handler((T)@event);
+            _handlers[typeof(T)] = @event => handler((T) @event);
         }
 
         public void Dispatch(object eventMessage)

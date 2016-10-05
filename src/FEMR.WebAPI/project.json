@@ -3,6 +3,8 @@
   "copyright": "Team FEMR",
   "version": "3.0.0-*",
   "dependencies": {
+    "FEMR.Core": "3.0.0",
+    "FEMR.Commands": "3.0.0",
     "Microsoft.NETCore.App": {
       "version": "1.0.1",
       "type": "platform"

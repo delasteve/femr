@@ -3,6 +3,7 @@
   "copyright": "Team FEMR",
   "version": "3.0.0-*",
   "dependencies": {
+    "BCrypt.Net-Core": "1.1.0",
     "Microsoft.CSharp": "4.0.1",
     "NETStandard.Library": "1.6.0"
   },

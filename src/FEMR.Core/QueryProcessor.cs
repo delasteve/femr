@@ -18,7 +18,7 @@ namespace FEMR.Core
             var handlerType = typeof(IQueryHandler<,>).MakeGenericType(query.GetType(), typeof(TResult));
             dynamic handler = _serviceLocator.GetInstance(handlerType);
 
-            return await handler.Handle((dynamic)query);
+            return await handler.Handle((dynamic) query);
         }
     }
 }

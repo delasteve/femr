@@ -6,6 +6,7 @@ namespace FEMR.DomainModels.Tests.Builders
     {
         private Guid _userId = Guid.NewGuid();
         private string _email = "";
+        private string _password = "";
         private string _firstName = "";
         private string _lastName = "";
 
@@ -18,6 +19,12 @@ namespace FEMR.DomainModels.Tests.Builders
         public UserBuilder WithEmail(string email)
         {
             _email = email;
+            return this;
+        }
+
+        public UserBuilder WithPassword(string password)
+        {
+            _password = password;
             return this;
         }
 
@@ -35,7 +42,7 @@ namespace FEMR.DomainModels.Tests.Builders
 
         public User Build()
         {
-            return new User(_userId, _email, _firstName, _lastName);
+            return new User(_userId, _email, _password, _firstName, _lastName);
         }
     }
 }

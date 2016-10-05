@@ -12,13 +12,15 @@ namespace FEMR.DomainModels.Tests
         {
             var userId = Guid.NewGuid();
             const string email = "foo@gmail.com";
+            const string password = "password1";
             const string firstName = "John";
             const string lastName = "Doe";
 
-            var user = new User(userId, email, firstName, lastName);
+            var user = new User(userId, email, password, firstName, lastName);
 
             user.UserId.Should().Be(userId);
             user.Email.Should().Be(email);
+            user.Password.Should().Be(password);
             user.FirstName.Should().Be(firstName);
             user.LastName.Should().Be(lastName);
         }
