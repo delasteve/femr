@@ -5,6 +5,10 @@
   "dependencies": {
     "FEMR.Core": "3.0.0",
     "FEMR.Commands": "3.0.0",
+    "FEMR.DataAccess.InMemory": "3.0.0",
+    "FEMR.Queries": "3.0.0",
+    "Autofac": "4.1.1",
+    "Autofac.Extensions.DependencyInjection": "4.0.0",
     "Microsoft.NETCore.App": {
       "version": "1.0.1",
       "type": "platform"

@@ -1,4 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Reflection;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using FEMR.Commands;
+using FEMR.Core;
+using FEMR.DataAccess.InMemory;
+using FEMR.Queries;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,21 +21,52 @@ namespace FEMR.WebAPI
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
 
+        public IContainer ApplicationContainer { get; private set; }
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
             services.AddMvc();
+            services.AddRouting(options => options.LowercaseUrls = true);
+
+            return CreateAutoFacDependencyContainer(services);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        private IServiceProvider CreateAutoFacDependencyContainer(IServiceCollection services)
+        {
+            var builder = new ContainerBuilder();
+
+            var coreAssembly = typeof(Aggregate).GetTypeInfo().Assembly;
+            var commandsAssembly = typeof(CreateUser).GetTypeInfo().Assembly;
+            var queriesAssembly = typeof(GetUser).GetTypeInfo().Assembly;
+            var dataAccessAssemply = typeof(EventData).GetTypeInfo().Assembly;
+            var webApiAssemply = typeof(Program).GetTypeInfo().Assembly;
+
+            builder
+                .RegisterAssemblyTypes(coreAssembly, commandsAssembly, queriesAssembly, webApiAssemply)
+                .AsImplementedInterfaces();
+
+            builder
+                .RegisterAssemblyTypes(dataAccessAssemply)
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder
+                .Register(p => new BCryptPasswordEncryptor(Configuration.GetSection("BCrypt").GetValue<int>("WorkFactor")))
+                .As<IPasswordEncryptor>();
+
+            builder.Populate(services);
+
+            this.ApplicationContainer = builder.Build();
+
+            return new AutofacServiceProvider(this.ApplicationContainer);
+        }
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));

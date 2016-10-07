@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using FEMR.Commands;
 using FEMR.Core;
+using FEMR.Queries;
+using FEMR.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FEMR.WebAPI.Controllers
@@ -13,48 +13,43 @@ namespace FEMR.WebAPI.Controllers
     public class UsersController : Controller
     {
         private readonly ICommandProcessor _commandProcessor;
+        private readonly IQueryProcessor _queryProcessor;
 
-        public UsersController(ICommandProcessor commandProcessor)
+        public UsersController(ICommandProcessor commandProcessor, IQueryProcessor queryProcessor)
         {
             _commandProcessor = commandProcessor;
+            _queryProcessor = queryProcessor;
         }
 
-        // GET api/users
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new[] {"value1", "value2"};
+            return new string[] { };
         }
 
-        // GET api/users/5
-        [HttpGet("{userId}")]
-        public string Get(Guid userId)
+        [HttpGet("{userId}", Name = "GetUser")]
+        public async Task<IActionResult> Get(Guid userId)
         {
-            return "value";
+            var user = await _queryProcessor.Process(new GetUser(userId));
+
+            return new JsonResult(user);
         }
 
-        // POST api/users
         [HttpPost]
-        public async Task<HttpResponseMessage> Post([FromBody] string email, string password, string firstName,
-            string lastName)
+        public async Task<IActionResult> Post([FromBody] UserPostModel userPostModel)
         {
             var userId = Guid.NewGuid();
-            await _commandProcessor.Process(new CreateUser(userId, email, password, firstName, lastName));
+            await _commandProcessor.Process(new CreateUser(userId, userPostModel.Email, userPostModel.Password, userPostModel.FirstName, userPostModel.LastName));
+            var user = await _queryProcessor.Process(new GetUser(userId));
 
-            var responseMessage = new HttpResponseMessage();
-            responseMessage.Headers.Location = new Uri("/users/" + userId);
-            responseMessage.StatusCode = HttpStatusCode.Created;
-
-            return responseMessage;
+            return CreatedAtRoute("GetUser", new { userId = userId }, user);
         }
 
-        // PUT api/users/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/users/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
