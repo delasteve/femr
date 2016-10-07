@@ -11,7 +11,7 @@ matrix:
       dotnet: 1.0.0-preview2-003131
 
 install:
-  - ./ci/travis-install.sh
+  - ./scripts/install.sh
 
 script:
-  - ./ci/travis-test.sh
+  - ./scripts/test.sh
