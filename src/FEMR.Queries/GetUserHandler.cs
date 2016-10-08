@@ -4,18 +4,20 @@ using FEMR.DomainModels;
 
 namespace FEMR.Queries
 {
-    public class GetUserHandler : IQueryHandler<GetUser, User>
+    public class GetUserInfoHandler : IQueryHandler<GetUserInfo, UserInfo>
     {
         private readonly IAggregateRepository _aggregateRepository;
 
-        public GetUserHandler(IAggregateRepository aggregateRepository)
+        public GetUserInfoHandler(IAggregateRepository aggregateRepository)
         {
             _aggregateRepository = aggregateRepository;
         }
 
-        public Task<User> Handle(GetUser query)
+        public async Task<UserInfo> Handle(GetUserInfo query)
         {
-            return _aggregateRepository.Demand<User>(query.UserId);
+            var user = await _aggregateRepository.Demand<User>(query.UserId);
+
+            return new UserInfo(user.UserId, user.Email, user.FirstName, user.LastName);
         }
     }
 }

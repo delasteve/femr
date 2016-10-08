@@ -30,7 +30,7 @@ namespace FEMR.WebAPI.Controllers
         [HttpGet("{userId}", Name = "GetUser")]
         public async Task<IActionResult> Get(Guid userId)
         {
-            var user = await _queryProcessor.Process(new GetUser(userId));
+            var user = await _queryProcessor.Process(new GetUserInfo(userId));
 
             return new JsonResult(user);
         }
@@ -40,7 +40,7 @@ namespace FEMR.WebAPI.Controllers
         {
             var userId = Guid.NewGuid();
             await _commandProcessor.Process(new CreateUser(userId, userPostModel.Email, userPostModel.Password, userPostModel.FirstName, userPostModel.LastName));
-            var user = await _queryProcessor.Process(new GetUser(userId));
+            var user = await _queryProcessor.Process(new GetUserInfo(userId));
 
             return CreatedAtRoute("GetUser", new { userId = userId }, user);
         }

@@ -43,7 +43,7 @@ namespace FEMR.WebAPI
 
             var coreAssembly = typeof(Aggregate).GetTypeInfo().Assembly;
             var commandsAssembly = typeof(CreateUser).GetTypeInfo().Assembly;
-            var queriesAssembly = typeof(GetUser).GetTypeInfo().Assembly;
+            var queriesAssembly = typeof(GetUserInfo).GetTypeInfo().Assembly;
             var dataAccessAssemply = typeof(EventData).GetTypeInfo().Assembly;
             var webApiAssemply = typeof(Program).GetTypeInfo().Assembly;
 

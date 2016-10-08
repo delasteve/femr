@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using FEMR.Core;
 
@@ -49,7 +50,7 @@ namespace FEMR.DataAccess.InMemory
                 {
                     EventId = Guid.NewGuid(),
                     AggregateId = aggregate.Id,
-                    AggregateType = typeof(T).AssemblyQualifiedName,
+                    AggregateType = typeof(T).GetTypeInfo().Name,
                     Event = e,
                     Created = created,
                     CommitSequence = i

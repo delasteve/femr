@@ -4,9 +4,9 @@ using FEMR.DomainModels;
 
 namespace FEMR.Queries
 {
-    public class GetUser : IQuery<User>
+    public class GetUserInfo : IQuery<UserInfo>
     {
-        public GetUser(Guid userId)
+        public GetUserInfo(Guid userId)
         {
             UserId = userId;
         }

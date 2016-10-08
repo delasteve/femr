@@ -1,6 +1,6 @@
 namespace FEMR.Queries.Tests
 {
-    public class GetUserHandlerTests
+    public class GetUserInfoHandlerTests
     {
 
     }
