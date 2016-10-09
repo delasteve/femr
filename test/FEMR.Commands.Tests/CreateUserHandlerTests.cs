@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using FEMR.Core;
 using FEMR.DomainModels;
+using FEMR.DomainModels.Boundaries;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -15,8 +16,9 @@ namespace FEMR.Commands.Tests
         {
             var mockPasswordEncryptor = new Mock<IPasswordEncryptor>();
             var mockAggregateRepository = new Mock<IAggregateRepository>();
+            var mockUserRepository = new Mock<IUserRepository>();
 
-            var handler = new CreateUserHandler(mockPasswordEncryptor.Object, mockAggregateRepository.Object);
+            var handler = new CreateUserHandler(mockPasswordEncryptor.Object, mockAggregateRepository.Object, mockUserRepository.Object);
 
             await handler.Handle(new CreateUser(Guid.NewGuid(), "foo@bar.com", "password", "first", "last"));
 
@@ -28,8 +30,9 @@ namespace FEMR.Commands.Tests
         {
             var mockPasswordEncryptor = new Mock<IPasswordEncryptor>();
             var mockAggregateRepository = new Mock<IAggregateRepository>();
+            var mockUserRepository = new Mock<IUserRepository>();
 
-            var handler = new CreateUserHandler(mockPasswordEncryptor.Object, mockAggregateRepository.Object);
+            var handler = new CreateUserHandler(mockPasswordEncryptor.Object, mockAggregateRepository.Object, mockUserRepository.Object);
 
             await handler.Handle(new CreateUser(Guid.NewGuid(), "foo@bar.com", "password", "first", "last"));
 
@@ -41,6 +44,7 @@ namespace FEMR.Commands.Tests
         {
             var mockPasswordEncryptor = new Mock<IPasswordEncryptor>();
             var mockAggregateRepository = new Mock<IAggregateRepository>();
+            var mockUserRepository = new Mock<IUserRepository>();
             var mockSequence = new MockSequence();
 
             var callOrder = 0;
@@ -58,11 +62,11 @@ namespace FEMR.Commands.Tests
                 .Returns(Task.CompletedTask)
                 .Callback(() =>
                 {
-                    callOrder.Should().Be(1);
+                    callOrder.Should().BeGreaterOrEqualTo(1);
                     callOrder++;
                 });
 
-            var handler = new CreateUserHandler(mockPasswordEncryptor.Object, mockAggregateRepository.Object);
+            var handler = new CreateUserHandler(mockPasswordEncryptor.Object, mockAggregateRepository.Object, mockUserRepository.Object);
 
             await handler.Handle(new CreateUser(Guid.NewGuid(), "foo@bar.com", "password", "first", "last"));
         }

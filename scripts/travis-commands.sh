@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 running_on_travis() {
   [[ -n "${TRAVIS}" ]]
