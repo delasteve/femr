@@ -18,12 +18,12 @@ namespace FEMR.DataAccess.InMemory
 
         public async Task<User> Demand(Guid userId)
         {
-            return await Task.FromResult(_users.First(user => user.UserId == userId));
+            return await Task.FromResult(_users.FirstOrDefault(user => user.UserId == userId));
         }
 
         public async Task<User> DemandByEmail(string email)
         {
-            return await Task.FromResult(_users.First(user => user.Email == email));
+            return await Task.FromResult(_users.FirstOrDefault(user => user.Email == email));
         }
 
         public async Task Save(User user)

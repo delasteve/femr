@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using FEMR.Commands;
 using FEMR.Core;
 using FEMR.Queries;
 using FEMR.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FEMR.WebAPI.Controllers
@@ -21,13 +21,8 @@ namespace FEMR.WebAPI.Controllers
             _queryProcessor = queryProcessor;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { };
-        }
-
         [HttpGet("{userId}", Name = "GetUser")]
+        [Authorize(Policy = "Users")]
         public async Task<IActionResult> Get(Guid userId)
         {
             var user = await _queryProcessor.Process(new GetUserInfo(userId));
@@ -43,16 +38,6 @@ namespace FEMR.WebAPI.Controllers
             var user = await _queryProcessor.Process(new GetUserInfo(userId));
 
             return CreatedAtRoute("GetUser", new { userId = userId }, user);
-        }
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

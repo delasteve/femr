@@ -3,11 +3,11 @@ using FEMR.Core;
 
 namespace FEMR.WebAPI.DependencyResolvers
 {
-    public class DotNetServiceLocator : IServiceLocator
+    public class AutoFacServiceLocator : IServiceLocator
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public DotNetServiceLocator(IServiceProvider serviceProvider)
+        public AutoFacServiceLocator(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
