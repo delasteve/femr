@@ -15,9 +15,9 @@ do_package_restore() {
   local name=$1
 
   echo "====== Restoring: $(basename ${name}) ======"
-  pushd ${name}
+  pushd ${name} > /dev/null
   dotnet restore
-  popd
+  popd > /dev/null
 }
 
 for i in $( find ./src ./test -mindepth 2 -maxdepth 2 -name "project.json" ); do

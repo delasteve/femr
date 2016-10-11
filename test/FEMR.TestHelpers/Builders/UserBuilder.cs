@@ -1,6 +1,7 @@
 using System;
+using FEMR.DomainModels;
 
-namespace FEMR.DomainModels.Tests.Builders
+namespace FEMR.TestHelpers.Builders
 {
     public class UserBuilder
     {

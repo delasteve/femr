@@ -15,11 +15,10 @@ do_package_test() {
   local name=$1
 
   echo "====== Running test suite: $(basename ${name}) ======"
-  pushd ${name}
+  pushd ${name} > /dev/null
   dotnet test
-  popd
+  popd > /dev/null
 }
-
-for i in $( find ./test -mindepth 2 -maxdepth 2 -name "project.json" ); do
+for i in $( find ./test -path ./test/FEMR.TestHelpers -prune -o -name project.json -print ); do
   test_package $(dirname "$i")
 done
